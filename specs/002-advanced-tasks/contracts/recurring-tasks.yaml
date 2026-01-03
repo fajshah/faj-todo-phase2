@@ -1,0 +1,122 @@
+# API Contract: Recurring Tasks
+
+## Overview
+This document defines the API contract for recurring task functionality in the task management system.
+
+## Base URL
+`/api/v1`
+
+## Endpoints
+
+### 1. Create Recurring Task Configuration
+- **Endpoint**: `POST /recurring-tasks`
+- **Description**: Creates a new recurring task configuration based on an existing task
+- **Request**:
+  ```json
+  {
+    "task_id": "uuid-string",
+    "recurrence_type": "daily|weekly|monthly",
+    "recurrence_days": ["monday", "wednesday", "friday"], // optional, for weekly recurrence
+    "end_date": "2023-12-31", // optional
+    "max_occurrences": 10 // optional
+  }
+  ```
+- **Response (201 Created)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "recurrence_type": "daily",
+    "recurrence_days": null,
+    "next_due_date": "2023-10-01",
+    "end_date": null,
+    "max_occurrences": null,
+    "created_at": "2023-09-30T10:00:00Z",
+    "updated_at": "2023-09-30T10:00:00Z"
+  }
+  ```
+- **Errors**:
+  - 400: Invalid input data
+  - 404: Task not found
+  - 409: Task already has a recurring configuration
+
+### 2. Get Recurring Task Configuration
+- **Endpoint**: `GET /recurring-tasks/{id}`
+- **Description**: Retrieves a specific recurring task configuration
+- **Response (200 OK)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "recurrence_type": "weekly",
+    "recurrence_days": ["monday", "wednesday", "friday"],
+    "next_due_date": "2023-10-02",
+    "end_date": "2023-12-31",
+    "max_occurrences": 10,
+    "created_at": "2023-09-30T10:00:00Z",
+    "updated_at": "2023-09-30T10:00:00Z"
+  }
+  ```
+- **Errors**:
+  - 404: Recurring task configuration not found
+
+### 3. Update Recurring Task Configuration
+- **Endpoint**: `PUT /recurring-tasks/{id}`
+- **Description**: Updates an existing recurring task configuration
+- **Request**:
+  ```json
+  {
+    "recurrence_type": "monthly",
+    "recurrence_days": null,
+    "end_date": "2024-12-31",
+    "max_occurrences": 24
+  }
+  ```
+- **Response (200 OK)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "recurrence_type": "monthly",
+    "recurrence_days": null,
+    "next_due_date": "2023-10-01",
+    "end_date": "2024-12-31",
+    "max_occurrences": 24,
+    "created_at": "2023-09-30T10:00:00Z",
+    "updated_at": "2023-10-01T15:30:00Z"
+  }
+  ```
+- **Errors**:
+  - 400: Invalid input data
+  - 404: Recurring task configuration not found
+
+### 4. Delete Recurring Task Configuration
+- **Endpoint**: `DELETE /recurring-tasks/{id}`
+- **Description**: Disables recurrence for a task (does not delete the original task)
+- **Response (204 No Content)**:
+  - No response body
+
+- **Errors**:
+  - 404: Recurring task configuration not found
+
+## Common Headers
+- `Content-Type: application/json`
+- `Authorization: Bearer {token}`
+
+## Error Format
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": {} // optional additional details
+  }
+}
+```
+
+## Authentication
+All endpoints require a valid authentication token in the Authorization header.
+
+## Rate Limiting
+API is rate-limited to 1000 requests per hour per user.

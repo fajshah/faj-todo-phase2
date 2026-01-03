@@ -1,0 +1,140 @@
+# API Contract: Task Reminders
+
+## Overview
+This document defines the API contract for task reminder functionality in the task management system.
+
+## Base URL
+`/api/v1`
+
+## Endpoints
+
+### 1. Schedule Task Reminder
+- **Endpoint**: `POST /reminders`
+- **Description**: Schedules a reminder for a specific task
+- **Request**:
+  ```json
+  {
+    "task_id": "uuid-string",
+    "reminder_time": "2023-10-01T09:00:00Z",
+    "notification_type": "browser"
+  }
+  ```
+- **Response (201 Created)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "reminder_time": "2023-10-01T09:00:00Z",
+    "sent": false,
+    "sent_at": null,
+    "notification_type": "browser",
+    "created_at": "2023-09-30T10:00:00Z"
+  }
+  ```
+- **Errors**:
+  - 400: Invalid input data (e.g., reminder time is in the past)
+  - 404: Task not found
+  - 409: Reminder already exists for this task at this time
+
+### 2. Get Task Reminder
+- **Endpoint**: `GET /reminders/{id}`
+- **Description**: Retrieves a specific reminder
+- **Response (200 OK)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "reminder_time": "2023-10-01T09:00:00Z",
+    "sent": false,
+    "sent_at": null,
+    "notification_type": "browser",
+    "created_at": "2023-09-30T10:00:00Z"
+  }
+  ```
+- **Errors**:
+  - 404: Reminder not found
+
+### 3. Get Task Reminders
+- **Endpoint**: `GET /reminders?task_id={task_id}`
+- **Description**: Retrieves all reminders for a specific task
+- **Response (200 OK)**:
+  ```json
+  [
+    {
+      "id": "uuid-string",
+      "task_id": "uuid-string",
+      "reminder_time": "2023-10-01T09:00:00Z",
+      "sent": false,
+      "sent_at": null,
+      "notification_type": "browser",
+      "created_at": "2023-09-30T10:00:00Z"
+    }
+  ]
+  ```
+
+### 4. Get Upcoming Reminders
+- **Endpoint**: `GET /reminders/upcoming?limit=10`
+- **Description**: Retrieves upcoming reminders (for the next 24 hours by default)
+- **Response (200 OK)**:
+  ```json
+  [
+    {
+      "id": "uuid-string",
+      "task_id": "uuid-string",
+      "reminder_time": "2023-10-01T09:00:00Z",
+      "sent": false,
+      "sent_at": null,
+      "notification_type": "browser",
+      "created_at": "2023-09-30T10:00:00Z"
+    }
+  ]
+  ```
+
+### 5. Mark Reminder as Sent
+- **Endpoint**: `PUT /reminders/{id}/sent`
+- **Description**: Marks a reminder as sent (used by the background job)
+- **Response (200 OK)**:
+  ```json
+  {
+    "id": "uuid-string",
+    "task_id": "uuid-string",
+    "reminder_time": "2023-10-01T09:00:00Z",
+    "sent": true,
+    "sent_at": "2023-10-01T09:00:05Z",
+    "notification_type": "browser",
+    "created_at": "2023-09-30T10:00:00Z"
+  }
+  ```
+- **Errors**:
+  - 404: Reminder not found
+
+### 6. Delete Reminder
+- **Endpoint**: `DELETE /reminders/{id}`
+- **Description**: Cancels a scheduled reminder
+- **Response (204 No Content)**:
+  - No response body
+
+- **Errors**:
+  - 404: Reminder not found
+
+## Common Headers
+- `Content-Type: application/json`
+- `Authorization: Bearer {token}`
+
+## Error Format
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": {} // optional additional details
+  }
+}
+```
+
+## Authentication
+All endpoints require a valid authentication token in the Authorization header.
+
+## Rate Limiting
+API is rate-limited to 1000 requests per hour per user.
