@@ -1,11 +1,6 @@
 {
-  "framework": "nextjs",
-  "settings": {
-    "enableCache": true
-  },
-  "functions": {
-    "app/**/*": {
-      "maxDuration": 60
-    }
-  }
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/next" }
+  ]
 }
