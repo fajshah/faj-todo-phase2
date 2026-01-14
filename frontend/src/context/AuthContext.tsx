@@ -29,12 +29,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -51,7 +52,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signup = async (email: string, password: string) => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/signup', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

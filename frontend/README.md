@@ -15,7 +15,7 @@ Frontend for the Phase II Todo Full-Stack Web Application built with Next.js.
 Create a `.env.local` file in the root of the frontend directory with the following:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_API_URL=https://fajji-backend-todo.hf.space/api
 ```
 
 ## Setup

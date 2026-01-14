@@ -37,9 +37,11 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/tasks', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/todos`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
         }
       });
       if (!response.ok) {
@@ -58,7 +60,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/tasks', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/todos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +85,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tasks/${id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/todos/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -106,10 +110,12 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tasks/${id}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/todos/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
         },
       });
       if (!response.ok) {
@@ -127,10 +133,12 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tasks/${id}/complete`, {
-        method: 'PUT',
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
+      const response = await fetch(`${API_URL}/todos/${id}/toggle`, {
+        method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
         },
       });
       if (!response.ok) {

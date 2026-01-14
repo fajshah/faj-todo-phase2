@@ -1,6 +1,6 @@
 // API client abstraction for JWT handling and API requests
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://fajji-backend-todo.hf.space/api';
 
 class ApiClient {
   private baseUrl: string;
@@ -124,25 +124,25 @@ class ApiClient {
 
   // Task methods - Updated to use backend API endpoints
   async getTasks(): Promise<{ tasks: any[] }> {
-    return this.request<{ tasks: any[] }>('/api/v1/tasks');
+    return this.request<{ tasks: any[] }>('/todos');
   }
 
   async createTask(taskData: Omit<any, 'id'>): Promise<any> {
-    return this.request<any>('/api/v1/tasks', {
+    return this.request<any>('/todos', {
       method: 'POST',
       body: JSON.stringify(taskData),
     });
   }
 
   async updateTask(id: string, taskData: Partial<any>): Promise<any> {
-    return this.request<any>(`/api/v1/tasks/${id}`, {
+    return this.request<any>(`/todos/${id}`, {
       method: 'PUT',
       body: JSON.stringify(taskData),
     });
   }
 
   async deleteTask(id: string): Promise<void> {
-    await this.request<void>(`/api/v1/tasks/${id}`, {
+    await this.request<void>(`/todos/${id}`, {
       method: 'DELETE',
     });
   }
